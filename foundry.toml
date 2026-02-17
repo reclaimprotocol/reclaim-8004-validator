@@ -1,0 +1,13 @@
+[profile.default]
+src = "src"
+out = "out"
+libs = ["lib", "node_modules"]
+auto_detect_solc = true
+
+remappings = [
+    "@openzeppelin/=node_modules/@openzeppelin/",
+    "@reclaimprotocol/=node_modules/@reclaimprotocol/",
+]
+
+[rpc_endpoints]
+polygon_amoy = "${POLYGON_AMOY_RPC_URL}"

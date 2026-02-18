@@ -11,3 +11,4 @@ remappings = [
 
 [rpc_endpoints]
 polygon_amoy = "${POLYGON_AMOY_RPC_URL}"
+base_sepolia = "https://sepolia.base.org"

@@ -73,16 +73,16 @@ sequenceDiagram
 
 | Chain | Contract | Address |
 |-------|----------|---------|
-| Base Sepolia | ReclaimValidator8004 | `0x1ea39e2b511cd8162EE5cC0A874d0a3E8643C529` |
+| Base Sepolia | ReclaimValidator8004 | `0x583fcFd84Fbe1bcB383E8A346bd48bF8f13565e4` |
 | Base Sepolia | Reclaim Verifier | `0xF90085f5Fd1a3bEb8678623409b3811eCeC5f6A5` |
 | Base Sepolia | Validation Registry | `0x8004C11C213ff7BaD36489bcBDF947ba5eee289B` |
 | Base Sepolia | Identity Registry | `0x8004ad19E14B9e0654f73353e8a0B600D46C2898` |
-| Polygon Amoy | ReclaimValidator8004 | `0x1ea39e2b511cd8162EE5cC0A874d0a3E8643C529` |
+| Polygon Amoy | ReclaimValidator8004 | `0x638F7b2D5328f28ef9061c4ed1B12b58D42aA25b` |
 | Polygon Amoy | Reclaim Verifier | `0xcd94A4f7F85dFF1523269C52D0Ab6b85e9B22866` |
 | Polygon Amoy | Validation Registry | `0x8004C11C213ff7BaD36489bcBDF947ba5eee289B` |
 | Polygon Amoy | Identity Registry | `0x8004ad19E14B9e0654f73353e8a0B600D46C2898` |
 
-### Whitelisted Providers (Amoy)
+### Whitelisted Providers
 
 - `http-provider-student-verification`
 - `http-provider-coinbase-kyc`

@@ -15,6 +15,11 @@ interface IValidationRegistry {
     ) external;
 }
 
+/// @notice ERC-8004 Identity Registry interface (only the function we call).
+interface IIdentityRegistry {
+    function ownerOf(bytes32 agentId) external view returns (address);
+}
+
 /// @title ReclaimValidator8004
 /// @notice Verifies Reclaim ZK proofs on-chain and posts results to the ERC-8004 Validation Registry.
 contract ReclaimValidator8004 {
@@ -24,7 +29,7 @@ contract ReclaimValidator8004 {
     address public owner;
     Reclaim public reclaimVerifier;
     IValidationRegistry public validationRegistry;
-    address public identityRegistry;
+    IIdentityRegistry public identityRegistry;
 
     /// @notice provider hash => allowed
     mapping(bytes32 => bool) public allowedProviders;
@@ -67,7 +72,7 @@ contract ReclaimValidator8004 {
         owner = msg.sender;
         reclaimVerifier = Reclaim(_reclaimVerifier);
         validationRegistry = IValidationRegistry(_validationRegistry);
-        identityRegistry = _identityRegistry;
+        identityRegistry = IIdentityRegistry(_identityRegistry);
     }
 
     // ---------------------------------------------------------------
@@ -116,13 +121,25 @@ contract ReclaimValidator8004 {
         bytes32 providerHash = keccak256(abi.encodePacked(proof.claimInfo.provider));
         require(allowedProviders[providerHash], "Provider not allowed");
 
-        // 3. Verify the Reclaim proof on-chain (reverts on failure)
+        // 3. Proof ownership: the proof must belong to the caller
+        require(
+            proof.signedClaim.claim.owner == msg.sender,
+            "Proof owner != msg.sender"
+        );
+
+        // 4. Agent ownership: caller must own the agent in the Identity Registry
+        require(
+            identityRegistry.ownerOf(agentId) == msg.sender,
+            "Caller is not agent owner"
+        );
+
+        // 5. Verify the Reclaim proof on-chain (reverts on failure)
         reclaimVerifier.verifyProof(proof);
 
-        // 4. Record agent -> provider -> timestamp
+        // 6. Record agent -> provider -> timestamp
         agentProviderTimestamp[agentId][providerHash] = block.timestamp;
 
-        // 5. Build response hash from proof data
+        // 7. Build response hash from proof data
         bytes32 responseHash = keccak256(
             abi.encodePacked(
                 proof.claimInfo.provider,
@@ -132,7 +149,7 @@ contract ReclaimValidator8004 {
             )
         );
 
-        // 6. Post to ERC-8004 Validation Registry (response = 1 means "validated / approved")
+        // 8. Post to ERC-8004 Validation Registry (response = 1 means "validated / approved")
         uint8 response = 1;
         validationRegistry.validationResponse(
             requestHash,

@@ -17,7 +17,7 @@ interface IValidationRegistry {
 
 /// @notice ERC-8004 Identity Registry interface (only the function we call).
 interface IIdentityRegistry {
-    function ownerOf(bytes32 agentId) external view returns (address);
+    function ownerOf(uint256 agentId) external view returns (address);
 }
 
 /// @title ReclaimValidator8004
@@ -129,7 +129,7 @@ contract ReclaimValidator8004 {
 
         // 4. Agent ownership: caller must own the agent in the Identity Registry
         require(
-            identityRegistry.ownerOf(agentId) == msg.sender,
+            identityRegistry.ownerOf(uint256(agentId)) == msg.sender,
             "Caller is not agent owner"
         );
 
